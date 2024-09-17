@@ -6,33 +6,36 @@ namespace Bücherreich_Anwendung
 {
     public class BorrowTransaction
     {
-        private CustomerController customerController;
-        private BookController bookController;
+        private CustomerController customerController; //Instanierung des CustomerControllers
+        private BookController bookController; //Instanierung des BookControllers
         private List<BorrowRecord> borrowHistory; // Liste der Ausleihvorgänge
         private JsonStorage<BorrowRecord> borrowHistoryStorage; // JsonStorage für die BorrowRecords
 
+        //Konstruktor der BorrowTransaction-Klasse
         public BorrowTransaction(CustomerController customerCtrl, BookController bookCtrl)
         {
             customerController = customerCtrl;
             bookController = bookCtrl;
-            borrowHistoryStorage = new JsonStorage<BorrowRecord>("borrowHistory.json");
-            borrowHistory = borrowHistoryStorage.LoadFromFile();
+            borrowHistoryStorage = new JsonStorage<BorrowRecord>("borrowHistory.json"); // Initialisierung des JsonStorage
+            borrowHistory = borrowHistoryStorage.LoadFromFile(); // Laden der Ausleihhistorie
 
             // Nach dem Laden alle Referenzen rekonstruieren
             foreach (var record in borrowHistory)
             {
-                record.ReconstructReferences(customerController, bookController);
+                record.ReconstructReferences(customerController, bookController); // Rekonstruktion der Referenzen
             }
         }
 
         // Buch ausleihen
         public void BorrowBook(int customerId, int bookId)
         {
-            var customer = customerController.ReadCustomer(customerId);
-            var book = bookController.ReadBook(bookId);
+            var customer = customerController.ReadCustomer(customerId); // Kunde suchen
+            var book = bookController.ReadBook(bookId); //Buch suchen 
 
+            // Überprüfen, ob Kunde und Buch existieren
             if (customer != null && book != null)
             {
+                // Überprüfen, ob das Buch verfügbar ist
                 if (book.IsAvailable())
                 {
                     book.AddBorrower(customer); // Setze den aktuellen Ausleiher
@@ -54,12 +57,14 @@ namespace Bücherreich_Anwendung
         // Buch zurückgeben
         public void ReturnBook(int customerId, int bookId)
         {
-            var customer = customerController.ReadCustomer(customerId);
-            var book = bookController.ReadBook(bookId);
+            var customer = customerController.ReadCustomer(customerId); // Kunde suchen
+            var book = bookController.ReadBook(bookId); // Buch suchen
 
+            // Überprüfen, ob Kunde und Buch existieren
             if (customer != null && book != null)
             {
                 Console.WriteLine(book.CurrentBorrower.Id == customer.Id);
+                // Überprüfen, ob der Kunde der aktuelle Ausleiher ist
                 if (book.CurrentBorrower.Id == customer.Id)
                 {
                     book.ReturnBook(); // Buch wird zurückgegeben
@@ -80,9 +85,9 @@ namespace Bücherreich_Anwendung
         // Methode, um die Historie zu aktualisieren
         private void AddToHistory(Customer customer, Book book)
         {
-            var borrowRecord = new BorrowRecord(customer, book, DateTime.Now);
-            borrowHistory.Add(borrowRecord);
-            SaveChanges();
+            var borrowRecord = new BorrowRecord(customer, book, DateTime.Now); // Erstellen eines neuen Ausleihvorgangs
+            borrowHistory.Add(borrowRecord);// Hinzufügen zur Historie
+            SaveChanges(); // Speichern der Änderungen
         }
 
         // Abrufen der Historie eines Buches

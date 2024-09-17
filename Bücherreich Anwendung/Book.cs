@@ -19,6 +19,7 @@ namespace Bücherreich_Anwendung
         [NonSerialized]
         public Customer CurrentBorrower; // Diese Referenz wird nach dem Laden wiederhergestellt
 
+        // Konstruktor für die Erstellung eines neuen Buches
         public Book(int id, string title)
         {
             Id = id;
@@ -27,6 +28,7 @@ namespace Bücherreich_Anwendung
             CurrentBorrower = null;
         }
 
+        // Konstruktor für die Deserialisierung
         [JsonConstructor]
         public Book(int id, string Title, int? CurrentBorrowerId)
         {
@@ -38,7 +40,7 @@ namespace Bücherreich_Anwendung
         // Methode zum Hinzufügen eines Ausleihers
         public void AddBorrower(Customer customer)
         {
-            if (customer != null)
+            if (customer != null) // Überprüfen, ob der Kunde nicht null ist
             {
                 CurrentBorrower = customer;
                 CurrentBorrowerId = customer.Id; // Speichern der ID
@@ -58,6 +60,7 @@ namespace Bücherreich_Anwendung
             return CurrentBorrower == null;
         }
 
+        // Methode zur Wiederherstellung der Referenzen nach der Deserialisierung
         public void ReconstructReferences(CustomerController customerController)
         {
             if (CurrentBorrowerId.HasValue)

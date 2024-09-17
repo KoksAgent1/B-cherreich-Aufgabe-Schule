@@ -10,6 +10,7 @@ namespace Bücherreich_Anwendung
     {
         static void Main(string[] args)
         {
+            // Instance einer instance des MenuControllers erstellen
             MenuController menuController = new MenuController();
             menuController.MainMenu();
         }

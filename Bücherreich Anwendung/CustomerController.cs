@@ -10,12 +10,14 @@ namespace Bücherreich_Anwendung
         private List<Customer> customerList;
         private JsonStorage<Customer> storage;
 
+        //Konstruktor
         public CustomerController()
         {
             storage = new JsonStorage<Customer>("customers.json");
             customerList = storage.LoadFromFile();
         }
 
+        //Methode zum Erstellen eines neuen Kunden
         public void CreateCustomer(string Namen)
         {
             var customer = new Customer(customerList.Count + 1, Namen);
@@ -23,11 +25,13 @@ namespace Bücherreich_Anwendung
             SaveToFile();
         }
 
+        //Methode zum Lesen eines Kunden
         public Customer ReadCustomer(int id)
         {
             return customerList.Find(c => c.Id == id);
         }
 
+        //Methode zum Aktualisieren eines Kunden
         public void UpdateCustomer(int id, string newName)
         {
             var customer = ReadCustomer(id);
@@ -38,6 +42,7 @@ namespace Bücherreich_Anwendung
             }
         }
 
+        //Methode zum Löschen eines Kunden
         public void DeleteCustomer(int id)
         {
             var customer = ReadCustomer(id);
@@ -48,11 +53,13 @@ namespace Bücherreich_Anwendung
             }
         }
 
+        //Methode zum Abrufen aller Kunden
         public List<Customer> GetAllCustomers()
         {
             return customerList;
         }
 
+        //Methode zum Speichern in eine Datei
         private void SaveToFile()
         {
             storage.SaveToFile(customerList);

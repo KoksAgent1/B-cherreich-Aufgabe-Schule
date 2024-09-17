@@ -11,10 +11,11 @@ namespace Bücherreich_Anwendung
         private List<Book> bookList;
         private JsonStorage<Book> storage;
 
+        // Konstruktor der BookController-Klasse
         public BookController()
         {
-            storage = new JsonStorage<Book>("books.json");
-            bookList = storage.LoadFromFile();
+            storage = new JsonStorage<Book>("books.json"); // Initialisierung des JsonStorage mit dem Dateinamen
+            bookList = storage.LoadFromFile(); // Laden der Bücher aus der Datei
 
             // Nach dem Laden aller Bücher müssen die Referenzen wiederhergestellt werden
             foreach (var book in bookList)
@@ -23,21 +24,25 @@ namespace Bücherreich_Anwendung
             }
         }
 
+        // Methode zum Erstellen eines neuen Buches
         public void CreateBook(string title)
         {
-            var book = new Book(bookList.Count + 1, title);
-            bookList.Add(book);
-            SaveToFile();
+            var book = new Book(bookList.Count + 1, title); // Erstellen eines neuen Buches mit einer ID
+            bookList.Add(book); // Hinzufügen des Buches zur Liste
+            SaveToFile(); // Speichern der Liste in die Datei
         }
 
+        // Methode zum Suchen eines Buches anhand der ID
         public Book ReadBook(int id)
         {
             return bookList.Find(b => b.Id == id);
         }
 
+        // Methode zum Aktualisieren eines Buches
         public void UpdateBook(int id, string newTitle)
         {
-            var book = ReadBook(id);
+            var book = ReadBook(id); // Buch anhand der ID suchen
+            // Wenn das Buch gefunden wurde, aktualisiere den Titel
             if (book != null)
             {
                 book.Title = newTitle;
@@ -45,9 +50,11 @@ namespace Bücherreich_Anwendung
             }
         }
 
+        // Methode zum Löschen eines Buches
         public void DeleteBook(int id)
         {
-            var book = ReadBook(id);
+            var book = ReadBook(id); // Buch anhand der ID suchen
+            // Wenn das Buch gefunden wurde, lösche es
             if (book != null)
             {
                 bookList.Remove(book);
@@ -56,11 +63,14 @@ namespace Bücherreich_Anwendung
         }
 
 
+        // Methode zum Abrufen aller Bücher
         public List<Book> GetAllBooks()
         {
             return bookList;
         }
 
+
+        // Methode zum Speichern der Bücher in die Datei
         public void SaveToFile()
         {
             storage.SaveToFile(bookList);

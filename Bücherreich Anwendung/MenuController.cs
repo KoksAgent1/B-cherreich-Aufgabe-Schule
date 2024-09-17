@@ -9,9 +9,12 @@ namespace Bücherreich_Anwendung
         static CustomerController customerController = new CustomerController();
         static BookController bookController = new BookController();
         static BorrowTransaction borrowTransaction = new BorrowTransaction(customerController, bookController);
+       
+        // Methode für das Hauptmenü
         public void MainMenu()
         {
-            bool exit = false;
+            bool exit = false; // Flag für das Beenden des Menüs
+            
             while (!exit)
             {
                 Header();
@@ -71,12 +74,15 @@ namespace Bücherreich_Anwendung
             }
         }
 
+        // Header für das Menü
         private void Header()
         {
             Console.Clear();
             Console.WriteLine("System von Florian Wielga. Version 1.0");
             Console.WriteLine("-------------------------------------------------------------");
         }
+
+        // Methoden für die erstellung von Kunden
         private void CreateCustomer()
         {
             Console.Clear();
@@ -88,6 +94,7 @@ namespace Bücherreich_Anwendung
             Console.ReadKey();
         }
 
+        // Methoden für die Erstellung von Büchern
         private void CreateBook()
         {
             Console.Clear();
@@ -98,6 +105,7 @@ namespace Bücherreich_Anwendung
             Console.ReadKey();
         }
 
+        // Methoden für das Ausleihen von Büchern
         private void BorrowBook()
         {
             Console.Clear();
@@ -110,6 +118,7 @@ namespace Bücherreich_Anwendung
             Console.ReadKey();
         }
 
+        // Methoden für das Zurückgeben von Büchern
         private void ReturnBook()
         {
             Console.Clear();
@@ -122,12 +131,14 @@ namespace Bücherreich_Anwendung
             Console.ReadKey();
         }
 
+        // Methoden für das Anzeigen ausgeliehener Bücher eines Kunden
         private void ShowBorrowedBooks()
         {
             Console.Clear();
             Console.Write("Kunden ID: ");
             int customerId = int.Parse(Console.ReadLine());
 
+            // Abrufen der ausgeliehenen Bücher
             var books = borrowTransaction.GetBooksBorrowedByCustomer(customerId);
             Console.WriteLine(books.Count);
             if (books.Count > 0)
@@ -144,12 +155,14 @@ namespace Bücherreich_Anwendung
             }
             Console.ReadKey();
         }
+        // Methoden für das Anzeigen der Ausleiher eines Buches
         private void ShowBookBorrowers()
         {
             Console.Clear();
             Console.Write("Buch ID: ");
             int bookId = int.Parse(Console.ReadLine());
 
+            //Abrufen der Ausleiher eines Buches
             var borrowHistory = borrowTransaction.GetBorrowHistory(bookId);
             if (borrowHistory.Count > 0)
             {
@@ -166,14 +179,16 @@ namespace Bücherreich_Anwendung
             Console.ReadKey();
         }
 
+        // Methoden für die Verwaltung von Kunden
         private void ManageCustomer()
         {
             Console.Clear();
             Console.Write("Kunden ID: ");
             int customerId = int.Parse(Console.ReadLine());
 
+            //Suchen des Kunden
             Customer customer = customerController.ReadCustomer(customerId);
-            if (customer == null)
+            if (customer == null) //Überprüfen ob der Kunde existiert
             {
                 Console.WriteLine("Kunde nicht gefunden.");
                 return;
@@ -200,13 +215,14 @@ namespace Bücherreich_Anwendung
             }
         }
 
+        // Methoden für die Verwaltung von Büchern
         private void ManageBook()
         {
             Console.Clear();
             Console.Write("Buch ID: ");
             int bookId = int.Parse(Console.ReadLine());
 
-            Book book = bookController.ReadBook(bookId);
+            Book book = bookController.ReadBook(bookId); //Suchen des Buches
             if (book == null)
             {
                 Console.WriteLine("Buch nicht gefunden.");
@@ -234,10 +250,13 @@ namespace Bücherreich_Anwendung
             }
         }
 
+        // Methoden für die Anzeige aller Kunden
         private void ListAllCustomers()
         {
+            // Abrufen aller Kunden
             var customers = customerController.GetAllCustomers();
             Console.Clear();
+            //Überprüfen ob Kunden vorhanden sind
             if (customers != null && customers.Count > 0)
             {
                 Console.WriteLine("\nListe aller Kunden:");
@@ -253,8 +272,10 @@ namespace Bücherreich_Anwendung
             Console.ReadKey();
         }
 
+        // Methoden für die Anzeige aller Bücher
         private void ListAllBooks()
         {
+            // Abrufen aller Bücher
             var books = bookController.GetAllBooks();
             Console.Clear();
             if (books != null && books.Count > 0)
